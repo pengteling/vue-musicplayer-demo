@@ -37,7 +37,9 @@ export default {
 
   },
   mounted () {
-    EventBus.$emit('setMedia', currentItem => {
+    // 严重错误 $on 写成 $emit
+    // EventBus.$emit('setMedia', currentItem => {
+    EventBus.$on('setMedia', currentItem => {
       // console.log(currentItem)
       this.url = currentItem.file
     })

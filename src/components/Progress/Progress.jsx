@@ -1,3 +1,4 @@
+import './progress.scss' /* 漏掉了SCSS */
 export default{
   props:{
     progress:{
