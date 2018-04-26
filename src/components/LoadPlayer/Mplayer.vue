@@ -25,6 +25,9 @@ export default {
     },
     volume: {
       required: true
+    },
+    changeCurrentTime: {
+      type: Number
     }
   },
   data () {
@@ -39,7 +42,9 @@ export default {
   },
   mounted () {
     if (this.autoplay) {
-      this.audio.play()
+      this.audio.oncanplay = () => {
+        this.audio.play()
+      }
       this.changeVolume(this.volume)
     }
   },
@@ -53,6 +58,9 @@ export default {
     },
     'volume' () {
       this.changeVolume(this.volume)
+    },
+    'changeCurrentTime' () {
+      this.audio.currentTime = this.changeCurrentTime
     }
 
   },

@@ -1,14 +1,15 @@
 <template>
   <div>
-    <!-- <mplayer
+    <mplayer
       ref="mplayer"
       :url="url"
       :autoplay="autoplay"
       :paused="paused"
       :volume="volume"
+      :changeCurrentTime="changeCurrentTime"
       @timeupdate="timeupdate"
       @loadedmetadata="loadedmetadata"
-    /> -->
+    />
   </div>
 </template>
 <script>
@@ -23,8 +24,8 @@ export default {
       autoplay: true,
       paused: false,
       volume: 80,
-      url: ''
-
+      url: '',
+      changeCurrentTime: 0
     }
   },
   methods: {
@@ -32,7 +33,7 @@ export default {
       EventBus.$emit('timeupdate', currentTime)
     },
     loadedmetadata (duration) {
-
+      EventBus.$emit('loadedmetadata', duration)
     }
 
   },
@@ -42,6 +43,15 @@ export default {
     EventBus.$on('setMedia', currentItem => {
       // console.log(currentItem)
       this.url = currentItem.file
+    })
+    EventBus.$on('playPause', paused => {
+      this.paused = paused
+    })
+    EventBus.$on('changeProgress', currentTime => {
+      console.log('load:' + currentTime)
+      this.changeCurrentTime = currentTime
+      /* 通过调用子组件的方法 */
+      // this.$refs.mplayer.changeProgress(currentTime)
     })
   }
 

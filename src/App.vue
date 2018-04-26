@@ -26,9 +26,9 @@ export default {
   },
   mounted () {
     EventBus.$emit('setMedia', this.currentItem)
-    setTimeout(() => {
-      EventBus.$emit('setMedia', this.currentItem)
-    }, 3000)
+    // setTimeout(() => {
+    //   EventBus.$emit('setMedia', this.currentItem)
+    // }, 3000)
   }
 }
 </script>
