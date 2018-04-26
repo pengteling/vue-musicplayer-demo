@@ -20,15 +20,32 @@ export default {
   data () {
     return {
       musicList: MUSIC_LIST,
-      currentItem: MUSIC_LIST[1],
+      currentItem: MUSIC_LIST[2],
       repeatType: 'cycle'
     }
   },
   mounted () {
     EventBus.$emit('setMedia', this.currentItem)
+    EventBus.$emit('getList', this.$data)
     // setTimeout(() => {
     //   EventBus.$emit('setMedia', this.currentItem)
     // }, 3000)
+    EventBus.$on('changeMusic', (currentItem) => {
+      this.currentItem = currentItem
+      EventBus.$emit('getList', this.$data)
+    })
+  },
+  watch: {
+    '$route' (to, from) {
+      if (to.name === 'Player') {
+        console.log(this.currentItem)
+        setTimeout(() => EventBus.$emit('setMedia', this.currentItem), 0)
+      }
+      if (to.name === 'List') {
+        console.log('getList')
+        setTimeout(() => EventBus.$emit('getList', this.$data), 0)
+      }
+    }
   }
 }
 </script>

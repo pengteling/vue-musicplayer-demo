@@ -74,7 +74,8 @@ export default {
     },
     timeupdate () {
       // console.log(this.audio.currentTime)
-      this.$emit('timeupdate', this.audio.currentTime)
+      /* 解决路由切换时 总播放时长丢失 */
+      this.$emit('timeupdate', this.audio.currentTime, this.audio.duration)
     },
     changeVolume (volume) {
       this.audio.volume = volume / 100

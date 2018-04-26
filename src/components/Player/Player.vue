@@ -18,7 +18,7 @@
               <!-- <div class="components-progress">
                 <div class="progress" style="width: 80%; background: rgb(47, 152, 66);"></div>
               </div> -->
-              <Progress :progress="80" barColor="#2f9842" @changeProgress="changeVolume"></Progress>
+              <Progress :progress="volume" barColor="#2f9842" @changeProgress="changeVolume"></Progress>
             </div>
           </div>
         </div>
@@ -58,7 +58,8 @@ export default {
       repeatType: 'cycle',
       paused: false,
       currentTime: 0,
-      duration: 0
+      duration: 0,
+      volume: 80
     }
   },
   computed: {
@@ -80,8 +81,9 @@ export default {
     }
   },
   mounted () {
-    EventBus.$on('timeupdate', currentTime => {
+    EventBus.$on('timeupdate', (currentTime, duration) => {
       // console.log('EventBus:' + currentTime)
+      this.duration = duration
       this.currentTime = currentTime
     })
     EventBus.$on('loadedmetadata', duration => {
@@ -94,7 +96,9 @@ export default {
   },
   methods: {
     changeVolume (progress) {
-      console.log(progress)
+      // console.log(progress)
+      this.volume = progress * 100
+      EventBus.$emit('changeVolume', progress * 100)
     },
     playPause () {
       this.paused = !this.paused

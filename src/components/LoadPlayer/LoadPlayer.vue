@@ -29,8 +29,8 @@ export default {
     }
   },
   methods: {
-    timeupdate (currentTime) {
-      EventBus.$emit('timeupdate', currentTime)
+    timeupdate (currentTime, duration) {
+      EventBus.$emit('timeupdate', currentTime, duration)
     },
     loadedmetadata (duration) {
       EventBus.$emit('loadedmetadata', duration)
@@ -52,6 +52,9 @@ export default {
       this.changeCurrentTime = currentTime
       /* 通过调用子组件的方法 */
       // this.$refs.mplayer.changeProgress(currentTime)
+    })
+    EventBus.$on('changeVolume', volume => {
+      this.volume = volume
     })
   }
 
