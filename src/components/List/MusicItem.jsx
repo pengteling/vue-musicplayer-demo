@@ -11,8 +11,10 @@ export default{
     }
   },
   methods:{
-    deleteMusicItem(musicItem){
-
+    deleteMusicItem(musicItem , e  ){
+      e.preventDefault()
+      e.stopPropagation()
+      EventBus.$emit('deleteMusic',musicItem)
     },
     changeMusicItem(musicItem){
       EventBus.$emit('changeMusic', musicItem)

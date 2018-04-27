@@ -17,9 +17,9 @@ export default {
       type: String,
       required: true
     },
-    autoplay: {
-      type: Boolean
-    },
+    // autoplay: {
+    //   type: Boolean
+    // },
     paused: {
       type: Boolean
     },
@@ -41,12 +41,12 @@ export default {
     }
   },
   mounted () {
-    if (this.autoplay) {
-      this.audio.oncanplay = () => {
+    this.audio.oncanplay = () => {
+      if (!this.paused) {
         this.audio.play()
       }
-      this.changeVolume(this.volume)
     }
+    this.changeVolume(this.volume)
   },
   updated () {
     console.log('mplayer updated')

@@ -29,11 +29,11 @@
           <Progress :progress="currentPercentAbsolute" barColor="#2f9842" @changeProgress="changeProgress"></Progress>
         </div>
         <div class="mt35 row">
-          <div><i class="icon prev"></i><i :class="`icon ml20 ${paused? 'play':'pause'}`" @click="playPause"></i><i class="icon next ml20"></i></div>
-          <div class="-col-auto"><i :class="`icon repeat-${repeatType}`" :title="repeatTypeStr"></i></div>
+          <div><i class="icon prev" @click="prevNextHandler('prev')"></i><i :class="`icon ml20 ${paused? 'play':'pause'}`" @click="playPause"></i><i class="icon next ml20" @click="prevNextHandler('next')"></i></div>
+          <div class="-col-auto"><i :class="`icon repeat-${repeatType}`" :title="repeatTypeStr" @click="changeRepeatType"></i></div>
         </div>
       </div>
-      <div class="-col-auto cover"><a href="#/lrc" class=""><img :src="currentItem.cover" :alt="currentItem.title" :class="paused?'pause':'play'"></a></div>
+      <div class="-col-auto cover"><router-link to="/lrc"><img :src="currentItem.cover" :alt="currentItem.title" :class="paused?'pause':'play'"></router-link></div>
     </div>
   </div>
 </template>
@@ -109,6 +109,24 @@ export default {
       let currentTime = this.duration * progress
       // console.log(currentTime)
       EventBus.$emit('changeProgress', currentTime)
+    },
+    changeRepeatType () {
+      let newRepeatType
+      switch (this.repeatType) {
+        case 'cycle':
+          newRepeatType = 'once'
+          break
+        case 'once':
+          newRepeatType = 'random'
+          break
+        default:
+          newRepeatType = 'cycle'
+      }
+      this.repeatType = newRepeatType
+      EventBus.$emit('changeRepeatType', newRepeatType)
+    },
+    prevNextHandler (type) {
+      EventBus.$emit('prevNext', type)
     }
   }
 }

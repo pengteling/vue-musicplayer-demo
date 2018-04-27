@@ -4,7 +4,7 @@ import Main from '@/components/Main.vue'
 import Header from '@/components/header/Header'
 import Player from '@/components/Player/Player'
 import List from '@/components/List/List'
-import Lrc from '@/components/Lrc/Lrc'
+import Lrc from '@/components/Lrc/Lrc.jsx'
 import LoadPlayer from '@/components/LoadPlayer/LoadPlayer'
 
 Vue.use(Router)
@@ -18,7 +18,7 @@ export default new Router({
       components: {
         default: Main,
         header: Header,
-        Loadplayer: LoadPlayer
+        loadplayer: LoadPlayer
       },
       children: [
         {

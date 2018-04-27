@@ -216,7 +216,8 @@ a{
     li{
       transition: all 0.3s;
       &.cur{
-        color:#2f9842;
+        // color:#2f9842;
+        color:#ee0000
       }
     }
   }

@@ -3,7 +3,6 @@
     <mplayer
       ref="mplayer"
       :url="url"
-      :autoplay="autoplay"
       :paused="paused"
       :volume="volume"
       :changeCurrentTime="changeCurrentTime"
@@ -21,7 +20,7 @@ export default {
   },
   data () {
     return {
-      autoplay: true,
+      // autoplay: true,
       paused: false,
       volume: 80,
       url: '',
