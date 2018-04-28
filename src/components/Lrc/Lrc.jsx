@@ -19,6 +19,10 @@ export default{
   mounted(){
     EventBus.$on('timeupdate',(time)=>{
       this.currentTime = time
+      /* 在歌词页面 自动播放下一首时 将curli清零 */
+      if(time<0.3){
+        this.curli = 0
+      }
     })
     EventBus.$on('sendLrc', (currentItem) =>{
       this.lrc = parseLrc(currentItem.lrc)

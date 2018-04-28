@@ -8,6 +8,7 @@
       :changeCurrentTime="changeCurrentTime"
       @timeupdate="timeupdate"
       @loadedmetadata="loadedmetadata"
+      @ended="ended"
     />
   </div>
 </template>
@@ -33,6 +34,9 @@ export default {
     },
     loadedmetadata (duration) {
       EventBus.$emit('loadedmetadata', duration)
+    },
+    ended () {
+      EventBus.$emit('ended')
     }
 
   },

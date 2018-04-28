@@ -55,6 +55,17 @@ export default {
     })
     // LRC页面 刷新时获取数据
     EventBus.$emit('sendLrc', this.currentItem)
+    // 响应播放结束时
+    EventBus.$on('ended', _ => {
+      if (this.repeatType === 'once') {
+        EventBus.$emit('changeProgress', 0)
+      } else {
+        this.prevNextHandler('next')
+        EventBus.$emit('setMedia', this.currentItem)
+        EventBus.$emit('getList', this.$data)
+        EventBus.$emit('sendLrc', this.currentItem)
+      }
+    })
   },
   watch: {
     '$route' (to, from) {
@@ -65,7 +76,7 @@ export default {
             EventBus.$emit('setMedia', this.currentItem)
             console.log(this.$refs.main.$refs.mainview.paused)
             console.log(this.$refs.loadplayer.$data.paused)
-            this.$refs.main.$refs.mainview.paused = this.$refs.loadplayer.$data.paused
+            // this.$refs.main.$refs.mainview.paused = this.$refs.loadplayer.$data.paused
           }
 
         )

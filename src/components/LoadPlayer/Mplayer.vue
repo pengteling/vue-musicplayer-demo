@@ -5,6 +5,7 @@
       :src="url"
       @timeupdate="timeupdate"
       @loadedmetadata="loadedmetadata"
+      @ended="ended"
     />
   </div>
 </template>
@@ -83,6 +84,9 @@ export default {
     loadedmetadata () {
       console.log(this.audio.duration)
       this.$emit('loadedmetadata', this.audio.duration)
+    },
+    ended () {
+      this.$emit('ended')
     }
   }
 

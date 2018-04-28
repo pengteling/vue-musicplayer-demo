@@ -74,10 +74,11 @@ export default {
       }
     },
     leftTime () {
-      return formatTime(this.duration - this.currentTime)
+      /* NaN的情况  */
+      return isNaN(this.duration - this.currentTime) ? '-:--' : formatTime(this.duration - this.currentTime)
     },
     currentPercentAbsolute () {
-      return this.currentTime / this.duration * 100
+      return isNaN(this.duration - this.currentTime) ? 0 : this.currentTime / this.duration * 100
     }
   },
   mounted () {
@@ -88,6 +89,7 @@ export default {
     })
     EventBus.$on('loadedmetadata', duration => {
       // console.log('EventBus:' + currentTime)
+      console.log('player组件响应loadedmetadata')
       this.duration = duration
     })
     EventBus.$on('setMedia', currentItem => {
