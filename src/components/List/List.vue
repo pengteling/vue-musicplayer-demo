@@ -13,23 +13,30 @@
 </template>
 <script>
 import './List.scss'
-import { EventBus } from '@/EventBus'
+// import { EventBus } from '@/EventBus'
+import {mapState, mapGetters} from 'vuex'
 import MusicItem from './MusicItem.jsx'
 export default {
   data () {
     return {
-      musicList: [],
-      currentItem: {}
+      // musicList: [],
+      // currentItem: {}
     }
   },
   components: {
     MusicItem
   },
-  mounted () {
-    EventBus.$on('getList', data => {
-      this.musicList = data.musicList
-      this.currentItem = data.currentItem
+  computed: {
+    ...mapState('list', ['musicList']),
+    ...mapGetters('list', {
+      currentItem: 'currentMusicItem'
     })
+  },
+  mounted () {
+    // EventBus.$on('getList', data => {
+    //   this.musicList = data.musicList
+    //   this.currentItem = data.currentItem
+    // })
   }
 }
 </script>

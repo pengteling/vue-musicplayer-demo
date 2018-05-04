@@ -18,7 +18,7 @@
               <!-- <div class="components-progress">
                 <div class="progress" style="width: 80%; background: rgb(47, 152, 66);"></div>
               </div> -->
-              <Progress :progress="volume" barColor="#2f9842" @changeProgress="changeVolume"></Progress>
+              <Progress :progress="volume" barColor="#2f9842" @changeProgress="CHANGE_VOLUME"></Progress>
             </div>
           </div>
         </div>
@@ -26,11 +26,11 @@
           <!-- <div class="components-progress">
             <div class="progress" style="width: 34.7861%; background: rgb(47, 152, 66);"></div>
           </div> -->
-          <Progress :progress="currentPercentAbsolute" barColor="#2f9842" @changeProgress="changeProgress"></Progress>
+          <Progress :progress="currentPercentAbsolute" barColor="#2f9842" @changeProgress="CHANGE_PROGRESS"></Progress>
         </div>
         <div class="mt35 row">
-          <div><i class="icon prev" @click="prevNextHandler('prev')"></i><i :class="`icon ml20 ${paused? 'play':'pause'}`" @click="playPause"></i><i class="icon next ml20" @click="prevNextHandler('next')"></i></div>
-          <div class="-col-auto"><i :class="`icon repeat-${repeatType}`" :title="repeatTypeStr" @click="changeRepeatType"></i></div>
+          <div><i class="icon prev" @click="prevNextHandler('prev')"></i><i :class="`icon ml20 ${paused? 'play':'pause'}`" @click="PLAY_PAUSE"></i><i class="icon next ml20" @click="prevNextHandler('next')"></i></div>
+          <div class="-col-auto"><i :class="`icon repeat-${repeatType}`" :title="repeatTypeStr" @click="CHANGE_REPEAT_TYPE"></i></div>
         </div>
       </div>
       <div class="-col-auto cover"><router-link to="/lrc"><img :src="currentItem.cover" :alt="currentItem.title" :class="paused?'pause':'play'"></router-link></div>
@@ -40,9 +40,10 @@
 
 <script>
 import './Player.scss'
-import { EventBus } from '@/EventBus'
+// import { EventBus } from '@/EventBus'
+import {mapState, mapGetters, mapMutations} from 'vuex'
 import Progress from '@/components/Progress/Progress.jsx'
-import { formatTime } from '@/utils/formatTime.js'
+// import { formatTime } from '@/utils/formatTime.js'
 // const formatTime = (num) => {
 //   let mm = parseInt(num / 60)
 //   let ss = parseInt(num - mm * 60)
@@ -54,15 +55,17 @@ export default {
   components: {Progress},
   data () {
     return {
-      currentItem: {},
-      repeatType: 'cycle',
-      paused: false,
-      currentTime: 0,
-      duration: 0,
-      volume: 80
+      // currentItem: {},
+      // repeatType: 'cycle',
+      // paused: false,
+      // currentTime: 0,
+      // duration: 0,
+      // volume: 80
     }
   },
   computed: {
+    ...mapState('list', ['repeatType']),
+    ...mapState('player', ['volume', 'paused']),
     repeatTypeStr () {
       switch (this.repeatType) {
         case 'cycle':
@@ -73,62 +76,81 @@ export default {
           return '随机播放'
       }
     },
-    leftTime () {
-      /* NaN的情况  */
-      return isNaN(this.duration - this.currentTime) ? '-:--' : formatTime(this.duration - this.currentTime)
-    },
-    currentPercentAbsolute () {
-      return isNaN(this.duration - this.currentTime) ? 0 : this.currentTime / this.duration * 100
-    }
+    ...mapGetters('player', [
+      'leftTime',
+      'currentPercentAbsolute'
+    ]),
+    ...mapGetters('list', {
+      currentItem: 'currentMusicItem'
+    })
+    // leftTime () {
+    //   /* NaN的情况  */
+    //   return isNaN(this.duration - this.currentTime) ? '-:--' : formatTime(this.duration - this.currentTime)
+    // },
+    // currentPercentAbsolute () {
+    //   return isNaN(this.duration - this.currentTime) ? 0 : this.currentTime / this.duration * 100
+    // }
   },
   mounted () {
-    EventBus.$on('timeupdate', (currentTime, duration) => {
-      // console.log('EventBus:' + currentTime)
-      this.duration = duration
-      this.currentTime = currentTime
-    })
-    EventBus.$on('loadedmetadata', duration => {
-      // console.log('EventBus:' + currentTime)
-      console.log('player组件响应loadedmetadata')
-      this.duration = duration
-    })
-    EventBus.$on('setMedia', currentItem => {
-      this.currentItem = currentItem
-    })
+    // EventBus.$on('timeupdate', (currentTime, duration) => {
+    //   // console.log('EventBus:' + currentTime)
+    //   this.duration = duration
+    //   this.currentTime = currentTime
+    // })
+    // EventBus.$on('loadedmetadata', duration => {
+    //   // console.log('EventBus:' + currentTime)
+    //   console.log('player组件响应loadedmetadata')
+    //   this.duration = duration
+    // })
+    // EventBus.$on('setMedia', currentItem => {
+    //   this.currentItem = currentItem
+    // })
   },
   methods: {
-    changeVolume (progress) {
-      // console.log(progress)
-      this.volume = progress * 100
-      EventBus.$emit('changeVolume', progress * 100)
-    },
-    playPause () {
-      this.paused = !this.paused
-      EventBus.$emit('playPause', this.paused)
-    },
-    changeProgress (progress) {
-      // console.log(progress)
-      let currentTime = this.duration * progress
-      // console.log(currentTime)
-      EventBus.$emit('changeProgress', currentTime)
-    },
-    changeRepeatType () {
-      let newRepeatType
-      switch (this.repeatType) {
-        case 'cycle':
-          newRepeatType = 'once'
-          break
-        case 'once':
-          newRepeatType = 'random'
-          break
-        default:
-          newRepeatType = 'cycle'
-      }
-      this.repeatType = newRepeatType
-      EventBus.$emit('changeRepeatType', newRepeatType)
-    },
+    ...mapMutations('player', [
+      'CHANGE_PROGRESS',
+      'CHANGE_VOLUME',
+      'PLAY_PAUSE'
+    ]),
+    ...mapMutations('list', [
+      'CHANGE_REPEAT_TYPE',
+      'PREV_NEXT'
+    ]),
+    // changeVolume (progress) {
+    //   this.CHANGE_VOLUME
+    //   // console.log(progress)
+    //   //this.volume = progress * 100
+    //   // EventBus.$emit('changeVolume', progress * 100)
+    // },
+    // playPause () {
+    //   this.paused = !this.paused
+    //   // EventBus.$emit('playPause', this.paused)
+    // },
+    // changeProgress (progress) {
+    //   this.CHANGE_PROGRESS(progress)
+    //   // console.log(progress)
+    //   // let currentTime = this.duration * progress
+    //   // console.log(currentTime)
+    //   // EventBus.$emit('changeProgress', currentTime)
+    // },
+    // changeRepeatType () {
+    //   let newRepeatType
+    //   switch (this.repeatType) {
+    //     case 'cycle':
+    //       newRepeatType = 'once'
+    //       break
+    //     case 'once':
+    //       newRepeatType = 'random'
+    //       break
+    //     default:
+    //       newRepeatType = 'cycle'
+    //   }
+    //   this.repeatType = newRepeatType
+    //   // EventBus.$emit('changeRepeatType', newRepeatType)
+    // },
     prevNextHandler (type) {
-      EventBus.$emit('prevNext', type)
+      // EventBus.$emit('prevNext', type)
+      this.PREV_NEXT(type)
     }
   }
 }

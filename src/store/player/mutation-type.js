@@ -1,0 +1,5 @@
+export const SET_CURRENT_TIME = 'SET_CURRENT_TIME'
+export const SET_DURATION = 'SET_DURATION'
+export const CHANGE_PROGRESS = 'CHANGE_PROGRESS'
+export const CHANGE_VOLUME = 'CHANGE_VOLUME'
+export const PLAY_PAUSE = 'PLAY_PAUSE'

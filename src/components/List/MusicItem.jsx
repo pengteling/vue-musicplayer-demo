@@ -1,4 +1,5 @@
-import { EventBus } from '@/EventBus'
+// import { EventBus } from '@/EventBus'
+import { mapMutations } from 'vuex'
 export default{
   name:'MusicItem',
   props:{
@@ -11,14 +12,17 @@ export default{
     }
   },
   methods:{
+    ...mapMutations('list',['CHANGE_MUSIC_ITEM','DELETE_MUSIC_ITEM']),
     deleteMusicItem(musicItem , e  ){
       e.preventDefault()
       e.stopPropagation()
-      EventBus.$emit('deleteMusic',musicItem)
+      this.DELETE_MUSIC_ITEM(musicItem)
+      //EventBus.$emit('deleteMusic',musicItem)
     },
     changeMusicItem(musicItem){
-      EventBus.$emit('changeMusic', musicItem)
-      EventBus.$emit('setMedia', musicItem)
+      this.CHANGE_MUSIC_ITEM(musicItem)
+      // EventBus.$emit('changeMusic', musicItem)
+      // EventBus.$emit('setMedia', musicItem)
     }
   },
 
